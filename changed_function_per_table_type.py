@@ -7,7 +7,7 @@ def clear_header(nrh, nums_of_columns, lines):
         for index in range(nums_of_columns):
             lines[element][index] = ''
 
-def overwrite_bold_data(nums_of_columns, nrbs, lines, nrh, bd_data, nrbe, nums_rows_bold, nums_of_rows, prh_idx, spc_idx, cell_spc_idx, content_spc, alignment_spc):
+def overwrite_bold_data(nums_of_columns, nrbs, lines, nrh, bd_data, nrbe, nums_rows_bold_rest, nums_of_rows, prh_idx, spc_idx, cell_spc_idx, content_spc, alignment_spc):
     # List all bold rows index in GEN CSV
     all_bd_row_arr = []
     # List all space rows index in GEN CSV
@@ -39,8 +39,8 @@ def overwrite_bold_data(nums_of_columns, nrbs, lines, nrh, bd_data, nrbe, nums_r
             for cell in range(nums_of_columns):
                 lines[-(idx + 1)][cell] = bd_data[-(idx + 1)][cell]
     
-    # Calculate nums of bold rows rest
-    nums_rows_bold_rest = nums_rows_bold - nrbs - nrbe
+    # # Calculate nums of bold rows rest
+    # nums_rows_bold_rest = nums_rows_bold_rest - nrbs - nrbe
 
     if nums_rows_bold_rest > 0:
         # RANDOM_RANGE nums of bold rows
@@ -65,15 +65,14 @@ def overwrite_bold_data(nums_of_columns, nrbs, lines, nrh, bd_data, nrbe, nums_r
             for bd_cell_idx in range(nums_of_columns):
                 lines[sub_row_arr[bd_row_idx]][bd_cell_idx] = bd_data[sub_bd_arr[bd_row_idx]][bd_cell_idx]
 
-    if len(all_bd_row_arr) > 0:
-        all_bd_row_arr.sort()
-        
+    if len(all_bd_row_arr) > 0:        
         for pos in all_bd_row_arr:
             space_row_arr.append(pos - 1)
         if nrh not in space_row_arr:
             space_row_arr.append(nrh)
-        if (nums_of_rows - 1) not in space_row_arr:
-            space_row_arr.append(nums_of_rows - 1)
+        if (nums_of_rows - 2) not in space_row_arr:
+            space_row_arr.append(nums_of_rows - 2)
+        space_row_arr.append(nums_of_rows - 1)
         space_row_arr.sort()
 
         new_prh_idx = np.where(np.in1d(original_bd_idx, prh_idx))[0]
@@ -102,7 +101,9 @@ def overwrite_bold_data(nums_of_columns, nrbs, lines, nrh, bd_data, nrbe, nums_r
         alig_spc = np.array(alignment_spc)[new_cont_spc_idx]
         for loop_count, element in enumerate(alig_spc):
             sub_alig_spc_arr = element.tolist()
-            aligment_spc_arr.append(sub_alig_spc_arr)             
+            aligment_spc_arr.append(sub_alig_spc_arr)
+        
+        all_bd_row_arr.sort()             
 
     return [all_bd_row_arr, space_row_arr, prh_row_arr, spc_row_arr, content_spc_arr, aligment_spc_arr]
 
@@ -111,7 +112,7 @@ def rand_number_columns(list_index_of_columns_rand_number, nrh, nums_of_rows, li
         for col_idx in list_index_of_columns_rand_number:
             lines[row_idx][col_idx] = rand_string_number(lines[row_idx][col_idx])
 
-def changed_function(nrh, nums_of_columns, lines, bd_data, nums_rows_bold, nums_of_rows, file_csv_dir, nrbs, nrbe, prh_idx, spc_idx, cell_spc_idx, content_spc, alignment_spc):
+def changed_function(nrh, nums_of_columns, lines, bd_data, nums_rows_bold_rest, nums_of_rows, file_csv_dir, nrbs, nrbe, prh_idx, spc_idx, cell_spc_idx, content_spc, alignment_spc):
     # Clear header
     clear_header(nrh, nums_of_columns, lines)
     
@@ -124,7 +125,7 @@ def changed_function(nrh, nums_of_columns, lines, bd_data, nums_rows_bold, nums_
     lines[2][4] = "Triệu VND"
 
     # Overwrite bold row data
-    pos_info_arr = overwrite_bold_data(nums_of_columns, nrbs, lines, nrh, bd_data, nrbe, nums_rows_bold, nums_of_rows, prh_idx, spc_idx, cell_spc_idx, content_spc, alignment_spc)
+    pos_info_arr = overwrite_bold_data(nums_of_columns, nrbs, lines, nrh, bd_data, nrbe, nums_rows_bold_rest, nums_of_rows, prh_idx, spc_idx, cell_spc_idx, content_spc, alignment_spc)
 
     # Index of columns need random number
     # FIXME: NEED CHANGE index of columns random number per table type

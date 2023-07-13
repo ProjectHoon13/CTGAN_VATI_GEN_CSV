@@ -41,6 +41,10 @@ def rand_date():
     return random_date.strftime("%d.%m.%Y")
 
 def rand_sub_arr(input_arr, nums_elements_sub_arr):
+    try:
+        assert nums_elements_sub_arr <= len(input_arr)
+    except AssertionError:
+        print('The NBRR (nums bold rows rest) constant is set to a value greater than the NBRR in the input CSV_BD file ({} > {}) !!!'.format(nums_elements_sub_arr, len(input_arr)))
     sub_arr = random.sample(input_arr, nums_elements_sub_arr)
     sub_arr.sort()
     return sub_arr

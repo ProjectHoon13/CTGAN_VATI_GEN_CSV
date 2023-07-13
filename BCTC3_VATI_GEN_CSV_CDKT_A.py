@@ -14,7 +14,7 @@ OUTPUT_FOLDER = 'VATI_GEN_CSV'
 
 # PARAMS 01 - Table Type
 # Name of table type
-TABLE_TYPE = 'BCTC3_CDKT_A_1'
+TABLE_TYPE = 'BCTC2_4C_1'
 
 # PARAMS 02 - Nums of Rows Header
 # NOT include first row of header
@@ -22,23 +22,23 @@ NRH = 2
 
 # PARAMS 03
 # NUMS_ROWS_BOLD_START
-NRBS = 3
+NRBS = 2
 
 # PARAMS 04
 # NUMS_ROWS_BOLD_END
 NRBE = 1
 
-# PARAMS 05 - Range Nums of Row in Bold
+# PARAMS 05 - Range Nums of Bold Rows Rest
 # NOT include START ROWS BOLD & END ROW
-# RANGE_NRB = [min, max]
-RANGE_NRB = [8, 12]
+# RANGE_NBRR = [min, max]
+RANGE_NBRR = [2, 3]
 
 # PARAMS 06 - Range Nums of Rows in Normal
 # RANGE_NRN = [min, max]
-RANGE_NRN = [20, 30]
+RANGE_NRN = [4, 8]
 
 # PARAMS 07 - Nums of CSV Samples Output
-NCSO = 500
+NCSO = 5
 
 
 ## FIXED PARAMS ##
@@ -50,9 +50,6 @@ BD_CSV_DIR = FOLDER_CSV + '/' + TABLE_TYPE + '_BD.csv'
 
 BASE_ADDR = os.getcwd()
 FOLDER_OUTPUT_DIR = join_path(BASE_ADDR, OUTPUT_FOLDER)
-
-# NRB - Nums of Row in Bold
-NRB = random.randint(RANGE_NRB[0], RANGE_NRB[1])
 
 # NFR - Nums Fixed Rows
 NFR = NRH + NRBS + NRBE
@@ -67,23 +64,23 @@ STOP_IDX = START_IDX + NCSO
 INDEX_RANGE = [START_IDX, STOP_IDX]
 
 # RANGE_ROWS
-RANGE_ROWS = [RANGE_NRB, RANGE_NRN, NFR]
+RANGE_ROWS = [RANGE_NBRR, RANGE_NRN, NFR]
 
 # Number of parallel processes
-NUMS_PROCESSES = 4
+NUMS_PROCESSES = 1
 
 # Number of epochs
-NUMS_EPOCHS = 300
+NUMS_EPOCHS = 3
 
 # SUB_CONSTANT
 TIME = '1'
 
 
-def gen_csv(range_nrb, range_nrn, nums_fixed_rows, ctgan, index, folder_csv_dir, bd_data, prh_idx, spc_idx, cell_spc_idx, content_spc, alignment_spc):
+def gen_csv(range_nbrr, range_nrn, nums_fixed_rows, ctgan, index, folder_csv_dir, bd_data, prh_idx, spc_idx, cell_spc_idx, content_spc, alignment_spc):
     # Random nums of rows
-    nums_rows_bold = random.randint(range_nrb[0], range_nrb[1])
+    nums_rows_bold_rest = random.randint(range_nbrr[0], range_nbrr[1])
     nums_rows_normal = random.randint(range_nrn[0], range_nrn[1])
-    nums_of_rows = nums_rows_bold + nums_rows_normal + nums_fixed_rows
+    nums_of_rows = nums_rows_bold_rest + nums_rows_normal + nums_fixed_rows
     
     # Create synthetic data
     synthetic_data = ctgan.sample(nums_of_rows - 1)
@@ -96,20 +93,20 @@ def gen_csv(range_nrb, range_nrn, nums_fixed_rows, ctgan, index, folder_csv_dir,
     lines = list(read_csv)
     nums_of_columns = len(lines[0])
 
-    changed_function(NRH, nums_of_columns, lines, bd_data, nums_rows_bold, nums_of_rows, file_csv_dir, NRBS, NRBE, prh_idx, spc_idx, cell_spc_idx, content_spc, alignment_spc)
+    changed_function(NRH, nums_of_columns, lines, bd_data, nums_rows_bold_rest, nums_of_rows, file_csv_dir, NRBS, NRBE, prh_idx, spc_idx, cell_spc_idx, content_spc, alignment_spc)
 
     print('Successfully generated csv file and txt file {:03}'.format(index + 1))
 
 def make_csv(ctgan, range_rows, index_range, bd_data, merged_cell_data_idx):
     prh_idx, spc_idx, cell_spc_idx, content_spc, alignment_spc = merged_cell_data_idx
-    range_nrb, range_nrn, nums_fixed_rows = range_rows
+    range_nbrr, range_nrn, nums_fixed_rows = range_rows
     start_index, stop_index = index_range
     folder_csv_dir = './' + OUTPUT_FOLDER
     make_dirs_or_format_dir(folder_csv_dir)
 
     with ThreadPool(processes=NUMS_PROCESSES) as pool:
         for index in range(start_index, stop_index):
-            pool.apply_async(gen_csv, args=(range_nrb, range_nrn, nums_fixed_rows, ctgan, index, folder_csv_dir, bd_data, prh_idx, spc_idx, cell_spc_idx, content_spc, alignment_spc))
+            pool.apply_async(gen_csv, args=(range_nbrr, range_nrn, nums_fixed_rows, ctgan, index, folder_csv_dir, bd_data, prh_idx, spc_idx, cell_spc_idx, content_spc, alignment_spc))
         pool.close()
         pool.join()
 
