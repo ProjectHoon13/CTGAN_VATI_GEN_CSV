@@ -14,7 +14,7 @@ OUTPUT_FOLDER = 'VATI_GEN_CSV'
 
 # PARAMS 01 - Table Type
 # Name of table type
-TABLE_TYPE = 'BCTC2_4C_1'
+TABLE_TYPE = 'BCTC2_4D_1'
 
 # PARAMS 02 - Nums of Rows Header
 # NOT include first row of header
@@ -22,7 +22,7 @@ NRH = 2
 
 # PARAMS 03
 # NUMS_ROWS_BOLD_START
-NRBS = 2
+NRBS = 0
 
 # PARAMS 04
 # NUMS_ROWS_BOLD_END
@@ -31,14 +31,14 @@ NRBE = 1
 # PARAMS 05 - Range Nums of Bold Rows Rest
 # NOT include START ROWS BOLD & END ROW
 # RANGE_NBRR = [min, max]
-RANGE_NBRR = [2, 3]
+RANGE_NBRR = [1, 2]
 
 # PARAMS 06 - Range Nums of Rows in Normal
 # RANGE_NRN = [min, max]
 RANGE_NRN = [4, 8]
 
 # PARAMS 07 - Nums of CSV Samples Output
-NCSO = 5
+NCSO = 500
 
 
 ## FIXED PARAMS ##
@@ -67,10 +67,10 @@ INDEX_RANGE = [START_IDX, STOP_IDX]
 RANGE_ROWS = [RANGE_NBRR, RANGE_NRN, NFR]
 
 # Number of parallel processes
-NUMS_PROCESSES = 1
+NUMS_PROCESSES = 4
 
 # Number of epochs
-NUMS_EPOCHS = 3
+NUMS_EPOCHS = 300
 
 # SUB_CONSTANT
 TIME = '1'
@@ -120,6 +120,11 @@ def main():
 
     # Get list of bold data
     bd_data = list(read_bd_csv(BD_CSV_DIR))
+
+    try:
+        assert (NRBS + NRBE) <= len(bd_data)
+    except AssertionError:
+        print('The NBR (nums bold rows) start & end constant is set to a value greater than the NBR in the input CSV_BD file ({} > {}) !!!'.format(NRBS + NRBE, len(bd_data)))
     
     # Get list of projected row header
     prh_idx = DICT_DISCRETE_COLUMNS_TYPE[TABLE_TYPE][1]
