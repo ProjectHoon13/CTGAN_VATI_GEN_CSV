@@ -9,12 +9,12 @@ from changed_function_per_table_type import changed_function
 ## CHANGED PARAMS ##
 # FIXME: Change the below parameters according to the generated table type
 
-# PARAMS 00 - OUTPUT FOLDER
-OUTPUT_FOLDER = 'VATI_GEN_CSV'
-
-# PARAMS 01 - Table Type
+# PARAMS 00 - Table Type
 # Name of table type
-TABLE_TYPE = 'BCTC2_4D_1'
+TABLE_TYPE = 'BCTC3_CDKT_A_2'
+
+# PARAMS 01 - OUTPUT FOLDER
+OUTPUT_FOLDER = 'VATI_GEN_CSV' + '/' + TABLE_TYPE
 
 # PARAMS 02 - Nums of Rows Header
 # NOT include first row of header
@@ -22,7 +22,7 @@ NRH = 2
 
 # PARAMS 03
 # NUMS_ROWS_BOLD_START
-NRBS = 0
+NRBS = 2
 
 # PARAMS 04
 # NUMS_ROWS_BOLD_END
@@ -31,11 +31,11 @@ NRBE = 1
 # PARAMS 05 - Range Nums of Bold Rows Rest
 # NOT include START ROWS BOLD & END ROW
 # RANGE_NBRR = [min, max]
-RANGE_NBRR = [1, 2]
+RANGE_NBRR = [2, 6]
 
 # PARAMS 06 - Range Nums of Rows in Normal
 # RANGE_NRN = [min, max]
-RANGE_NRN = [4, 8]
+RANGE_NRN = [18, 26]
 
 # PARAMS 07 - Nums of CSV Samples Output
 NCSO = 500
