@@ -11,7 +11,7 @@ from changed_function_per_table_type import changed_function
 
 # PARAMS 00 - Table Type
 # Name of table type
-TABLE_TYPE = 'BCTC3_CDKT_A_2'
+TABLE_TYPE = 'BCTC3_CDKT_A_1'
 
 # PARAMS 01 - OUTPUT FOLDER
 OUTPUT_FOLDER = 'VATI_GEN_CSV' + '/' + TABLE_TYPE
